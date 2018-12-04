@@ -1,32 +1,24 @@
 const axios = require('axios');
 
-const BASE_URL = 'https://www.amdoren.com/api/currency.php';
+const BASE_URL = 'https://free.currencyconverterapi.com/api/v6/convert';
 
-const convertParams = (from, to, amount) => ({
-  api_key: process.env.KEY,
-  from,
-  to,
-  amount
+// Gets the conversion rate from input currency to output currency
+const convertParams = (from, to) => ({
+  q: `${from}_${to}`,
+  compact: 'y'
 })
-
-// handle result from https://www.amdoren.com/currency-api/
-const handleResult = (result) => {
-  const { data } = result;
-  const { error, error_message: errorMessage, amount } = data;
-
-  switch (error) {
-    case 0: return amount;
-    case 320: case 400: return errorMessage;
-    default: return errorMessage;
-  }
-}
 
 const convertCurrency = async (fromCurrency, toCurrency, amount) => {
   try {
     const result = await axios.get(BASE_URL, {
       params: convertParams(fromCurrency, toCurrency, amount)
     });
-    return handleResult(result);
+    const resultKey = `${fromCurrency}_${toCurrency}`;
+    const { [resultKey]: data } = result.data;
+    if (data) {
+      const { val: rate } = data;
+      return Math.round(amount * rate);
+    }
   } catch (e) {
     console.log(e);
   }
