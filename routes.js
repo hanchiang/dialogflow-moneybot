@@ -11,6 +11,8 @@ router.post('/', async (req, res) => {
   const { queryResult } = req.body;
   const { action, parameters } = queryResult;
 
+  console.log(req.body);
+
   let fulfillmentText = '';
 
   if (action === 'convert') {
