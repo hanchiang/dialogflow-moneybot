@@ -22,7 +22,6 @@ router.post('/', async (req, res) => {
 
       res.status(200).json(formatResponse(fulfillmentText));
     } else {
-      // Receives object of { error, data };
       const data = await convertCurrency(inputCurrency, outputCurrency, amount);
       if (data) {
         res.status(200).json(formatResponse(`${amount} ${inputCurrency} gets you ${data} ${outputCurrency}!`));

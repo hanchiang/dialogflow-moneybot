@@ -15,6 +15,7 @@ const convertCurrency = async (fromCurrency, toCurrency, amount) => {
     });
     const resultKey = `${fromCurrency}_${toCurrency}`;
     const { [resultKey]: data } = result.data;
+    
     if (data) {
       const { val: rate } = data;
       return Math.round(amount * rate);
